@@ -4,53 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instant Weather</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/meteo.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <h1>La météo du jour en 1 seul clic !</h1>
   
     <div id="search-container">
         <input type="text" id="postal-code-input" placeholder="Entrez un code postal">
-        <button onclick="searchCity()">Rechercher</button>
-        <p id="city-name"></p>
+        <button id="search-button">Rechercher</button>
     </div>
 
-    <h2 id="weather-info">Villes concernées :</h2>
+    <h2>Villes concernées :</h2>
     <ul id="cities-list"></ul>
 
-    <script>
-        function searchCity() {
-            const postalCode = document.getElementById('postal-code-input').value;
-            const citiesList = document.getElementById('cities-list');
-
-            fetch(`https://geo.api.gouv.fr/communes?codePostal=${postalCode}&fields=nom`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    citiesList.innerHTML = ''; // Clear previous results
-
-                    if (data.length > 0) {
-                        data.forEach(cityData => {
-                            const cityName = cityData.nom;
-                            const li = document.createElement('li');
-                            li.textContent = cityName;
-                            citiesList.appendChild(li);
-                        });
-                    } else {
-                        const li = document.createElement('li');
-                        li.textContent = "Aucune ville trouvée pour ce code postal";
-                        citiesList.appendChild(li);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-    </script>
+    <script src="../js/meteo.js"></script>
 </body>
 </html>

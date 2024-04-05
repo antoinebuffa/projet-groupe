@@ -1,20 +1,40 @@
-function getCityNameByPostalCode(postalCode) {
-    const url = `https://api-adresse.data.gouv.fr/search/?postcode=${postalCode}`;
-    
-    fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        if (data.features.length > 0) {
-            const cityName = data.features[0].properties.city;
-            console.log("Nom de la ville:", cityName);
-        } else {
-            console.log("Ville non trouvée");
-        }
-    })
-    .catch(error => {
-        console.error("Une erreur s'est produite lors de la récupération des données:", error);
-    });
+document.addEventListener("DOMContentLoaded", () => {
+
+document.getElementById('search-button').addEventListener('click', function() {
+    searchCity();
+});
+
+function searchCity() {
+    const postalCode = document.getElementById('postal-code-input').value;
+    const citiesList = document.getElementById('cities-list');
+
+    fetch(`https://geo.api.gouv.fr/communes?codePostal=${postalCode}&fields=nom`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            citiesList.innerHTML = ''; // Clear previous results
+
+            if (data.length > 0) {
+                data.forEach(cityData => {
+                    const cityName = cityData.nom;
+                    const li = document.createElement('li');
+                    li.textContent = cityName;
+                    citiesList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = "Aucune ville trouvée pour ce code postal";
+                citiesList.appendChild(li);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 }
 
-const postalCode = "78000";
-getCityNameByPostalCode(postalCode);
+    
+})
