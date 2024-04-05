@@ -24,6 +24,7 @@ function searchCity() {
                     const li = document.createElement('li');
                     li.textContent = cityName;
                     citiesList.appendChild(li);
+                    cities.style.display = "block";
                 });
             } else {
                 const li = document.createElement('li');
